@@ -62,10 +62,10 @@ public class SongsController : ControllerBase
     }
     
     [HttpGet("[action]")]
-    public async Task<IActionResult> NewSongs()
+    public async Task<IActionResult> SearchSongs(string query)
     {
         var songs = await (from song in _dataContext.Songs
-            orderby song.UploadedDate descending
+            where song.Title.StartsWith(query)
             select new
             {
                 Id = song.Id,
