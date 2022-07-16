@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MusicApi.Data;
 using MusicApi.Helpers;
 using musicApi.Models;
@@ -24,5 +25,18 @@ public class AlbumsController : ControllerBase
         await _dataContext.Albums.AddAsync(album);
         await _dataContext.SaveChangesAsync();
         return StatusCode(StatusCodes.Status201Created);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAlbums()
+    {
+        var albums = await (from album in _dataContext.Albums
+            select new
+            {
+                Id = album.Id,
+                Name = album.Name,
+                ImageUrl = album.ImageUrl
+            }).ToListAsync();
+        return Ok(albums);
     }
 }

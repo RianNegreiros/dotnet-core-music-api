@@ -39,4 +39,11 @@ public class ArtistsController : ControllerBase
             }).ToListAsync();
         return Ok(artists);
     }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> ArtistDetails(int artistId)
+    {
+        var artistDetails = await _dataContext.Artists.Where(a => a.Id == artistId).Include(a => a.Songs).ToListAsync();
+        return Ok(artistDetails);
+    }
 }
