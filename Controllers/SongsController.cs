@@ -60,4 +60,20 @@ public class SongsController : ControllerBase
             }).ToListAsync();
         return Ok(songs);
     }
+    
+    [HttpGet("[action]")]
+    public async Task<IActionResult> NewSongs()
+    {
+        var songs = await (from song in _dataContext.Songs
+            orderby song.UploadedDate descending
+            select new
+            {
+                Id = song.Id,
+                Title = song.Title,
+                Duration = song.Duration,
+                ImageUrl = song.ImageUrl,
+                AudioUrl = song.AudioUrl
+            }).ToListAsync();
+        return Ok(songs);
+    }
 }
