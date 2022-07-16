@@ -5,7 +5,7 @@ using musicApi.Models;
 
 namespace MusicApi.Controllers;
 
-[Route("api/[controller")]
+[Route("api/[controller]")]
 [ApiController]
 public class AlbumsController : ControllerBase
 {
