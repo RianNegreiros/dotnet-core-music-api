@@ -28,8 +28,11 @@ public class ArtistsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetArtist()
+    public async Task<IActionResult> GetAllArtist(int? pageNumber, int? pageSize)
     {
+        int currentPageNumber = pageNumber ?? 1;
+        int currentPageSize = pageSize ?? 5;
+        
         var artists = await (from artist in _dataContext.Artists
             select new
             {
@@ -37,7 +40,7 @@ public class ArtistsController : ControllerBase
                 Name = artist.Name,
                 ImageUrl = artist.ImageUrl
             }).ToListAsync();
-        return Ok(artists);
+        return Ok(artists.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize));
     }
 
     [HttpGet("[action]")]

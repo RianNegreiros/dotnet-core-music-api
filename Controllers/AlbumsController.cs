@@ -28,8 +28,10 @@ public class AlbumsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAlbums()
+    public async Task<IActionResult> GetAllAlbums(int? pageNumber, int? pageSize)
     {
+        int currentPageNumber = pageNumber ?? 1;
+        int currentPageSize = pageSize ?? 5;
         var albums = await (from album in _dataContext.Albums
             select new
             {
@@ -37,7 +39,7 @@ public class AlbumsController : ControllerBase
                 Name = album.Name,
                 ImageUrl = album.ImageUrl
             }).ToListAsync();
-        return Ok(albums);
+        return Ok(albums.Skip((currentPageNumber - 1) * currentPageSize).Take(currentPageSize));
     }
     
 }
