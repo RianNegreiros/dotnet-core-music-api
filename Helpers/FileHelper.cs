@@ -4,9 +4,9 @@ namespace MusicApi.Helpers;
 
 public static class FileHelper
 {
-    public static async Task<string> UploadImage(IFormFile file)
+    public static async Task<string> UploadImage(IFormFile file, IConfiguration configuration)
     {
-        string connectionString = "DefaultEndpointsProtocol=https;AccountName=aspnetcoremusicapi;AccountKey=lp2U1BGdlu8gLcIjbDerGL9IHBafkcGe9H1MeeQsCz4PUfFtxLsbsCxlvVspQfj893SGSSi72dXQ+AStFYm9ag==;EndpointSuffix=core.windows.net";
+        string connectionString = configuration.GetConnectionString("AzureStorage");
         string containerName = "artistsimage";
 
         BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
@@ -18,9 +18,9 @@ public static class FileHelper
         return blobClient.Uri.AbsoluteUri;
     }
     
-    public static async Task<string> UploadFile(IFormFile file)
+    public static async Task<string> UploadFile(IFormFile file, IConfiguration configuration)
     {
-        string connectionString = "DefaultEndpointsProtocol=https;AccountName=aspnetcoremusicapi;AccountKey=lp2U1BGdlu8gLcIjbDerGL9IHBafkcGe9H1MeeQsCz4PUfFtxLsbsCxlvVspQfj893SGSSi72dXQ+AStFYm9ag==;EndpointSuffix=core.windows.net";
+        string connectionString = configuration.GetConnectionString("AzureStorage");
         string containerName = "audiofiles";
 
         BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
