@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MusicApi.Data;
 using MusicApi.Helpers;
@@ -10,19 +11,22 @@ namespace MusicApi.Controllers;
 [ApiController]
 public class SongsController : ControllerBase
 {
+    protected readonly IConfiguration Configuration;
     private DataContext _dataContext;
 
-    public SongsController(DataContext dataContext)
+    public SongsController(DataContext dataContext, IConfiguration configuration)
     {
         _dataContext = dataContext;
+        Configuration = configuration;
     }
+
 
     [HttpPost]
     public async Task<IActionResult> Post([FromForm] Song song)
     {
-        var imageUrl = await FileHelper.UploadImage(song.Image);
+        var imageUrl = await FileHelper.UploadImage(song.Image, Configuration);
         song.ImageUrl = imageUrl;
-        var audioUrl = await FileHelper.UploadFile(song.AudioFile);
+        var audioUrl = await FileHelper.UploadFile(song.AudioFile, Configuration);
         song.AudioUrl = audioUrl;
         song.UploadedDate = DateTime.Now;
         await _dataContext.Songs.AddAsync(song);

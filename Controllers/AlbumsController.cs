@@ -10,17 +10,19 @@ namespace MusicApi.Controllers;
 [ApiController]
 public class AlbumsController : ControllerBase
 {
+    protected readonly IConfiguration Configuration;
     private DataContext _dataContext;
 
-    public AlbumsController(DataContext dataContext)
+    public AlbumsController(DataContext dataContext, IConfiguration configuration)
     {
         _dataContext = dataContext;
+        Configuration = configuration;
     }
 
     [HttpPost]
     public async Task<IActionResult> Post([FromForm] Album album)
     {
-        var imageUrl = await FileHelper.UploadImage(album.Image);
+        var imageUrl = await FileHelper.UploadImage(album.Image, Configuration);
         album.ImageUrl = imageUrl;
         await _dataContext.Albums.AddAsync(album);
         await _dataContext.SaveChangesAsync();
